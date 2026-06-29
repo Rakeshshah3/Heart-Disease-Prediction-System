@@ -1,0 +1,20 @@
+# Environment variables
+.env
+Backend/.env
+
+# Virtual environments
+myenv/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# VS Code
+.vscode/
+
+# JetBrains IDE
+.idea/
+
+# Database (optional)
+*.db

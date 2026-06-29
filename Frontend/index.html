@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>HeartAI Dashboard</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- 🔐 AUTH CHECK (SAFE) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+</head>
+
+<body>
+
+  <!-- 🔥 TOP NAVBAR -->
+  <div
+    style="display:flex; justify-content:space-between; align-items:center; padding:20px 40px; border-bottom:1px solid rgba(255,255,255,0.08);">
+
+    <div style="font-size:20px; font-weight:600; color:#60a5fa; cursor:pointer;" onclick="goHome()">
+      ❤️ HeartAI
+    </div>
+
+    <div style="display:flex; gap:10px;">
+      <button onclick="goHome()"
+        style="padding:8px 14px; border-radius:8px; border:1px solid #3b82f6; background:transparent; color:#3b82f6; cursor:pointer;">
+        Home
+      </button>
+
+      <button onclick="logout()"
+        style="padding:8px 14px; border:none; border-radius:8px; background:#ef4444; color:white; cursor:pointer;">
+        Logout
+      </button>
+    </div>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="wrapper">
+    <div class="card">
+
+      <h1>❤️ Heart Disease Predictor</h1>
+      <p class="subtitle">AI-powered risk analysis & weekly health plan</p>
+
+      <form id="predictionForm">
+
+        <div class="grid">
+
+          <div class="input-group">
+            <label>Patient Name</label>
+            <input type="text" id="name" required>
+          </div>
+
+          <div class="input-group">
+            <label>Age</label>
+            <input type="number" id="age" value="45" required>
+          </div>
+
+          <div class="input-group">
+            <label>Gender</label>
+            <select id="sex">
+              <option value="1">Male</option>
+              <option value="0">Female</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Chest Pain</label>
+            <select id="cp">
+              <option value="0">Typical</option>
+              <option value="1">Atypical</option>
+              <option value="2">Non-anginal</option>
+              <option value="3">Asymptomatic</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Blood Pressure</label>
+            <input type="number" id="trestbps" value="120" required>
+          </div>
+
+          <div class="input-group">
+            <label>Cholesterol</label>
+            <input type="number" id="chol" value="200" required>
+          </div>
+
+          <div class="input-group">
+            <label>Fasting Sugar</label>
+            <select id="fbs">
+              <option value="0">≤120</option>
+              <option value="1">>120</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>ECG</label>
+            <select id="restecg">
+              <option value="0">Normal</option>
+              <option value="1">Abnormal</option>
+              <option value="2">Hypertrophy</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Max Heart Rate</label>
+            <input type="number" id="thalach" value="150" required>
+          </div>
+
+          <div class="input-group">
+            <label>Exercise Angina</label>
+            <select id="exang">
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Oldpeak</label>
+            <input type="number" id="oldpeak" step="0.1" value="1.0" required>
+          </div>
+
+          <div class="input-group">
+            <label>Slope</label>
+            <select id="slope">
+              <option value="0">Upsloping</option>
+              <option value="1">Flat</option>
+              <option value="2">Downsloping</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="button-group">
+
+          <button type="submit" class="btn" id="analyzeBtn">
+            🔍 Analyze Risk
+          </button>
+
+          <button type="button" onclick="goToSuggestion()" class="suggestion-btn" id="suggestBtn" disabled>
+            📋 Suggestions
+          </button>
+
+        </div>
+
+      </form>
+
+      <!-- LOADER -->
+      <div id="loader" class="loader hidden">
+        ⏳ Analyzing your health data...
+      </div>
+
+      <!-- RESULT -->
+      <div id="result" class="result hidden">
+        <h2 id="predictionText"></h2>
+        <div id="riskText"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 🔥 MAIN SCRIPT -->
+  <script src="js/script.js"></script>
+
+  <!-- 🔐 NAVIGATION -->
+  <script>
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "home.html";
+    }
+
+    function goHome() {
+      window.location.href = "home.html";
+    }
+
+    function goToSuggestion() {
+      window.location.href = "suggestions.html";
+    }
+  </script>
+
+</body>
+
+</html>

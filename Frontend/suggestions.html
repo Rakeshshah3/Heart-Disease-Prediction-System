@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Health Suggestions | HeartAI</title>
+
+  <link rel="stylesheet" href="css/suggestion.css">
+
+  <!-- 🔐 AUTH CHECK -->
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- MAIN -->
+  <div class="container">
+
+    <!-- RISK -->
+    <div class="risk-section">
+      <h1 id="riskText">Loading...</h1>
+
+      <div class="risk-bar">
+        <div id="riskFill" class="risk-fill"></div>
+      </div>
+    </div>
+
+    <!-- PLAN -->
+    <div id="planText" class="plan-grid">
+      <p style="text-align:center; color:#94a3b8;">Generating plan...</p>
+    </div>
+
+  </div>
+
+  <!-- BUTTONS -->
+  <div style="text-align:center; margin-top:20px;">
+    <button id="downloadBtn" disabled>Download Report</button>
+    <button onclick="goBack()" class="back-btn">← Back</button>
+  </div>
+
+  <!-- SCRIPT -->
+  <script src="js/suggestions.js"></script>
+
+  <script>
+    function goBack() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Verify OTP</title>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #020617;
+      color: white;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    .otp-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .otp-box {
+      width: 50px;
+      height: 60px;
+      font-size: 24px;
+      text-align: center;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: white;
+    }
+
+    #msg {
+      margin-top: 15px;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 40px;
+      border: none;
+      border-radius: 12px;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Verify</h2>
+  <p>Your code was sent via email</p>
+
+  <div class="otp-container">
+    <input class="otp-box" maxlength="1">
+    <input class="otp-box" maxlength="1">
+    <input class="otp-box" maxlength="1">
+    <input class="otp-box" maxlength="1">
+    <input class="otp-box" maxlength="1">
+    <input class="otp-box" maxlength="1">
+  </div>
+
+  <button onclick="verify()">Verify</button>
+
+  <p id="msg"></p>
+
+
+
+  <script>
+    const inputs = document.querySelectorAll(".otp-box");
+
+    // auto move next
+    inputs.forEach((input, i) => {
+      input.addEventListener("input", () => {
+        if (input.value && i < inputs.length - 1) {
+          inputs[i + 1].focus();
+        }
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !input.value && i > 0) {
+          inputs[i - 1].focus();
+        }
+      });
+    });
+
+    function getOTP() {
+      return Array.from(inputs).map(i => i.value).join("");
+    }
+
+    function verify() {
+      const email = localStorage.getItem("email");
+      const password = localStorage.getItem("password");
+      const otp = getOTP();
+
+      if (otp.length !== 6) {
+
+        const msg = document.getElementById("msg");
+
+        msg.innerText = "Please enter the complete verification code.";
+        msg.style.color = "#ef4444";
+
+        return;
+      }
+
+      fetch("http://127.0.0.1:8000/auth/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.message === "OTP verified") {
+
+            // signup after verification
+            return fetch("http://127.0.0.1:8000/auth/signup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password })
+            });
+
+          } else {
+            throw new Error();
+          }
+        })
+        .then(() => {
+
+          const msg = document.getElementById("msg");
+
+          msg.innerText =
+            "Account created successfully. Redirecting to login...";
+          msg.style.color = "#22c55e";
+
+          setTimeout(() => {
+
+            window.location.href = "login.html";
+
+          }, 1500);
+
+        })
+        .catch(() => {
+
+          const msg = document.getElementById("msg");
+
+          msg.innerText = "Invalid verification code.";
+          msg.style.color = "#ef4444";
+
+        });
+    }
+  </script>
+
+</body>
+
+</html>

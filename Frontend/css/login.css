@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(to right, #1c92d2, #f2fcfe);
+}
+
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #1c92d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#errorMsg {
+  color: red;
+}

@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* =========================
+   BODY
+========================= */
+body {
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+/* =========================
+   WRAPPER
+========================= */
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* =========================
+   CARD
+========================= */
+.card {
+  width: 900px;
+  padding: 40px;
+  border-radius: 20px;
+  background: rgba(30, 41, 59, 0.75);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+}
+
+/* =========================
+   HEADER TEXT
+========================= */
+h1 {
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  margin-bottom: 20px;
+  color: #94a3b8;
+}
+
+/* =========================
+   GRID
+========================= */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* =========================
+   INPUT GROUP
+========================= */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+label {
+  font-size: 13px;
+  color: #cbd5f5;
+}
+
+/* =========================
+   INPUT + SELECT
+========================= */
+input,
+select {
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #ffffff;
+  font-size: 14px;
+  transition: 0.25s;
+  width: 100%;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* FIX NUMBER SPIN BUTTON */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+/* =========================
+   🔥 FIX WHITE BACKGROUND ISSUE
+========================= */
+input:focus,
+input:active,
+select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: rgba(255,255,255,0.08) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.25);
+}
+
+/* =========================
+   🔥 CHROME AUTOFILL FIX
+========================= */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0.08) inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* PLACEHOLDER */
+input::placeholder {
+  color: #94a3b8;
+}
+
+/* DROPDOWN FIX */
+select option {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.btn,
+.suggestion-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+/* PRIMARY */
+.btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(59,130,246,0.4);
+}
+
+/* SECONDARY */
+.suggestion-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.suggestion-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(34,197,94,0.4);
+}
+
+/* =========================
+   LOADER
+========================= */
+.loader {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.3);
+  color: #93c5fd;
+}
+
+.hidden {
+  display: none;
+}
+
+/* =========================
+   RESULT
+========================= */
+.result {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =========================
+   RISK BAR
+========================= */
+.risk-bar {
+  height: 12px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.risk-fill {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.low-risk-bar {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+.high-risk-bar {
+  background: linear-gradient(90deg, #f97316, #ef4444);
+}
+
+/* =========================
+   WEEKLY PLAN
+========================= */
+.weekly-plan {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.day-card {
+  padding: 15px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: 0.3s;
+}
+
+.day-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+}
+
+/* =========================
+   REPORT BUTTON
+========================= */
+.report-btn {
+  margin-top: 15px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.report-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(6,182,212,0.4);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+    padding: 25px;
+  }
+
+  .grid,
+  .weekly-plan {
+    grid-template-columns: 1fr;
+  }
+}

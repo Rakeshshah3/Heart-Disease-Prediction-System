@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>HeartAI</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #020617;
+      color: #e2e8f0;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 80px;
+    }
+
+    .logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      color: #3b82f6;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-outline {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: transparent;
+      color: #cbd5f5;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 100px 80px;
+      gap: 60px;
+    }
+
+    .hero-text {
+      max-width: 520px;
+    }
+
+    .badge {
+      font-size: 13px;
+      color: #3b82f6;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 48px;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+
+    /* ===== BUTTONS ===== */
+    .buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .primary {
+      background: #3b82f6;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .secondary {
+      border: 1px solid #334155;
+      background: transparent;
+      padding: 12px 22px;
+      border-radius: 8px;
+      color: #cbd5f5;
+      cursor: pointer;
+    }
+
+    /* ===== RIGHT PANEL ===== */
+    .hero-card {
+      width: 320px;
+      padding: 30px;
+      border-radius: 16px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .icon {
+      font-size: 18px;
+    }
+
+    .feature-text h3 {
+      font-size: 15px;
+      color: #60a5fa;
+    }
+
+    .feature-text p {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    /* ===== FEATURES ===== */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 60px 80px;
+    }
+
+    .card {
+      padding: 20px;
+      border-radius: 12px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+    }
+
+    .card h3 {
+      color: #60a5fa;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        padding: 60px 20px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+        padding: 40px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo" onclick="goHome()">❤️ HeartAI</div>
+
+    <div class="nav-links" id="navLinks"></div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+
+    <div class="hero-text">
+      <div class="badge">AI Health Predictor</div>
+
+      <h1>Simple Smart Heart Disease Prediction</h1>
+
+      <p class="subtitle">
+        Analyze heart disease risk instantly and get personalized insights powered by AI.
+      </p>
+
+      <div class="buttons">
+        <button class="primary" onclick="handleAnalyze()">Analyze Now</button>
+        <button class="secondary">Learn More</button>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="hero-card">
+
+      <div class="feature-item">
+        <div class="icon">📊</div>
+        <div class="feature-text">
+          <h3>Smart Analysis</h3>
+          <p>Accurate ML predictions</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="icon">📅</div>
+        <div class="feature-text">
+          <h3>Weekly Plan</h3>
+          <p>Personalized suggestions</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="icon">📄</div>
+        <div class="feature-text">
+          <h3>Reports</h3>
+          <p>Download PDF reports</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="card">
+      <h3>⚡ Fast</h3>
+      <p>Instant prediction results</p>
+    </div>
+
+    <div class="card">
+      <h3>🧠 AI Powered</h3>
+      <p>Advanced ML algorithms</p>
+    </div>
+
+    <div class="card">
+      <h3>📄 Reports</h3>
+      <p>Generate detailed reports</p>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const token = localStorage.getItem("token");
+      const nav = document.getElementById("navLinks");
+
+      if (!nav) return;
+
+      if (token) {
+        nav.innerHTML = `
+      <button class="btn-primary" onclick="goDashboard()">Dashboard</button>
+      <button class="btn-outline" onclick="logout()">Logout</button>
+    `;
+      } else {
+        nav.innerHTML = `
+      <button class="btn-outline" onclick="goLogin()">Login</button>
+      <button class="btn-primary" onclick="goSignup()">Get Started</button>
+    `;
+      }
+
+    });
+
+    function handleAnalyze() {
+      const token = localStorage.getItem("token");
+      window.location.href = token ? "index.html" : "login.html";
+    }
+
+    function goHome() { window.location.href = "home.html"; }
+    function goLogin() { window.location.href = "login.html"; }
+    function goSignup() { window.location.href = "signup.html"; }
+    function goDashboard() { window.location.href = "index.html"; }
+    function logout() { localStorage.removeItem("token"); location.reload(); }
+  </script>
+
+</body>
+
+</html>

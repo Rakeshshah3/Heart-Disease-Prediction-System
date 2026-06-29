@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login | HeartAI</title>
+
+  <!-- 🔐 REDIRECT IF ALREADY LOGGED IN -->
+  <script>
+    const token = localStorage.getItem("token");
+    if (token) {
+      window.location.href = "index.html"; // go to dashboard
+    }
+  </script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .top-bar {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      font-weight: 600;
+      color: #60a5fa;
+      cursor: pointer;
+    }
+
+    .container {
+      width: 360px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    label {
+      font-size: 13px;
+      margin-bottom: 6px;
+      display: block;
+      color: #94a3b8;
+    }
+
+    button {
+      width: 100%;
+      height: 50px;
+      padding: 0 16px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 92%;
+      height: 50px;
+      padding: 0 16px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    input {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+    }
+
+    .primary-btn:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
+
+    #msg {
+      margin-top: 12px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .link span {
+      color: #3b82f6;
+      cursor: pointer;
+    }
+
+    .forgot {
+      text-align: right;
+      font-size: 12px;
+      margin-top: -6px;
+      color: #3b82f6;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-bar" onclick="goHome()">← Home</div>
+
+  <div class="container">
+
+    <h2>Login</h2>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Enter your email">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password">
+    </div>
+
+    <div class="forgot" onclick="goForgot()">Forgot Password?</div>
+
+    <button id="loginBtn" class="primary-btn" onclick="login()">Login</button>
+
+    <p id="msg"></p>
+
+    <div class="link">
+      Don't have an account? <span onclick="goSignup()">Signup</span>
+    </div>
+
+  </div>
+
+  <script>
+
+    /* ENTER KEY SUPPORT */
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        login();
+      }
+    });
+
+    /* LOGIN FUNCTION */
+    async function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const msg = document.getElementById("msg");
+      const btn = document.getElementById("loginBtn");
+
+      if (!email || !password) {
+        msg.innerText = "Fill all fields ❌";
+        msg.style.color = "red";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Logging in...";
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.detail || "Invalid credentials");
+        }
+
+        // ✅ SAVE TOKEN
+        localStorage.setItem("token", data.access_token);
+
+        msg.innerText = "Login successful. Redirecting to dashboard...";
+        msg.style.color = "#22c55e";
+        msg.style.color = "#22c55e";
+
+        setTimeout(() => {
+          window.location.href = "index.html"; // dashboard
+        }, 800);
+
+      } catch (err) {
+        msg.innerText = err.message;
+        msg.style.color = "red";
+        btn.disabled = false;
+        btn.innerText = "Login";
+      }
+    }
+
+    /* NAVIGATION */
+    function goSignup() {
+      window.location.href = "signup.html";
+    }
+
+    function goForgot() {
+      window.location.href = "forgot-password.html";
+    }
+
+    function goHome() {
+      window.location.href = "home.html";
+    }
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Create Account | HeartAI</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, #020617, #020617);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .card {
+      width: 400px;
+      padding: 30px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    input {
+      width: 94%;
+      height: 45px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: #e2e8f0;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      height: 45px;
+      border-radius: 10px;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+    }
+
+    #msg {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .link span {
+      color: #3b82f6;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <h2>Create Account</h2>
+
+    <label>Email</label>
+    <input type="text" id="email" placeholder="Enter your email" autocomplete="off" spellcheck="false">
+
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Enter your password" autocomplete="new-password">
+
+    <button id="btn" onclick="sendOTP()">Create Account</button>
+
+    <p id="msg"></p>
+
+    <div class="link">
+      Already have an account? <span onclick="goLogin()">Login</span>
+    </div>
+
+  </div>
+
+  <script>
+    // clear autofill bug
+    window.onload = () => {
+      document.getElementById("email").value = "";
+    };
+
+    function setMsg(text, color = "red") {
+      const msg = document.getElementById("msg");
+      msg.innerText = text;
+      msg.style.color = color;
+    }
+
+    // email validation
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    async function sendOTP() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const btn = document.getElementById("btn");
+
+      // validation
+      if (!email || !password) {
+        setMsg("Please fill all fields ❌");
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        setMsg("Enter valid email ❌");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Sending...";
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/auth/send-otp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            purpose: "signup"   // ✅ FIXED
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          setMsg(data.detail || "Request failed ❌");
+          btn.disabled = false;
+          btn.innerText = "Create Account";
+          return;
+        }
+
+        // store for verify page
+        localStorage.setItem("email", email);
+        localStorage.setItem("password", password);
+
+        setMsg("OTP sent 📩", "lightgreen");
+
+        setTimeout(() => {
+          window.location.href = "verify.html";
+        }, 800);
+
+      } catch (err) {
+        setMsg("Server error ❌");
+      }
+
+      btn.disabled = false;
+      btn.innerText = "Create Account";
+    }
+
+    function goLogin() {
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+
+</html>
