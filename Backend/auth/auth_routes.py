@@ -1,5 +1,6 @@
+import re
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, field_validator
 from sqlalchemy.orm import Session
 
 from database.database import SessionLocal, engine, Base
@@ -20,16 +21,33 @@ Base.metadata.create_all(bind=engine)
 # ---------------- SCHEMAS ----------------
 
 class UserAuth(BaseModel):
-    email: str
+    email: EmailStr
     password: str
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        # Minimum 8 characters
+        if len(value) < 8:
+            raise ValueError("Password must be at least 8 characters long.")
+        
+        # Minimum 1 digit
+        if not re.search(r"\d", value):
+            raise ValueError("Password must contain at least one digit.")
+        
+        # Minimum 1 special character
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", value):
+            raise ValueError("Password must contain at least one special character.")
+        
+        return value
 
 
 class EmailSchema(BaseModel):
-    email: str
+    email: EmailStr
 
 
 class VerifyOTPSchema(BaseModel):
-    email: str
+    email: EmailStr
     otp: str
 
 
@@ -50,7 +68,6 @@ def send_otp(
     data: EmailSchema,
     db: Session = Depends(get_db)
 ):
-
     email = data.email
 
     # 🔥 BLOCK EXISTING USERS
@@ -78,7 +95,6 @@ def send_otp(
         }
 
     except Exception as e:
-
         print("❌ EMAIL ERROR:", e)
 
         return {
@@ -94,7 +110,6 @@ def send_reset_otp(
     data: EmailSchema,
     db: Session = Depends(get_db)
 ):
-
     email = data.email
 
     # 🔥 CHECK ACCOUNT EXISTS
@@ -122,7 +137,6 @@ def send_reset_otp(
         }
 
     except Exception as e:
-
         print("❌ EMAIL ERROR:", e)
 
         return {
@@ -135,12 +149,10 @@ def send_reset_otp(
 
 @router.post("/verify-otp")
 def verify_otp(data: VerifyOTPSchema):
-
     email = data.email
     otp = data.otp
 
     if otp_storage.get(email) != otp:
-
         raise HTTPException(
             status_code=400,
             detail="Invalid OTP"
@@ -160,9 +172,7 @@ def signup(
     user: UserAuth,
     db: Session = Depends(get_db)
 ):
-
     if user.email not in verified_emails:
-
         raise HTTPException(
             status_code=400,
             detail="Please verify OTP first"
@@ -173,7 +183,6 @@ def signup(
     ).first()
 
     if existing:
-
         raise HTTPException(
             status_code=400,
             detail="User already exists"
@@ -202,13 +211,11 @@ def login(
     user: UserAuth,
     db: Session = Depends(get_db)
 ):
-
     existing = db.query(User).filter(
         User.email == user.email
     ).first()
 
     if not existing:
-
         raise HTTPException(
             status_code=401,
             detail="Account does not exist"
@@ -218,7 +225,6 @@ def login(
         user.password,
         existing.password
     ):
-
         raise HTTPException(
             status_code=401,
             detail="Incorrect password"
@@ -240,20 +246,17 @@ def reset_password(
     user: UserAuth,
     db: Session = Depends(get_db)
 ):
-
     existing = db.query(User).filter(
         User.email == user.email
     ).first()
 
     if not existing:
-
         raise HTTPException(
             status_code=404,
             detail="User not found"
         )
 
     if user.email not in verified_emails:
-
         raise HTTPException(
             status_code=400,
             detail="Please verify OTP first"
