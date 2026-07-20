@@ -124,6 +124,14 @@
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
+    // password validation: min 8 chars, 1 digit, 1 special char
+    function isValidPassword(password) {
+      const minLength = password.length >= 8;
+      const hasDigit = /\d/.test(password);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+      return minLength && hasDigit && hasSpecialChar;
+    }
+
     async function sendOTP() {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -140,6 +148,11 @@
         return;
       }
 
+      if (!isValidPassword(password)) {
+        setMsg("Password must be 8+ chars, with 1 digit & 1 special char ❌");
+        return;
+      }
+
       btn.disabled = true;
       btn.innerText = "Sending...";
 
@@ -151,14 +164,22 @@
           },
           body: JSON.stringify({
             email: email,
-            purpose: "signup"   // ✅ FIXED
+            purpose: "signup"
           })
         });
 
         const data = await res.json();
 
         if (!res.ok) {
-          setMsg(data.detail || "Request failed ❌");
+          // Extract string from array/object detail to prevent [object Object]
+          let errorText = "Request failed ❌";
+          if (Array.isArray(data.detail)) {
+            errorText = data.detail[0].msg;
+          } else if (typeof data.detail === "string") {
+            errorText = data.detail;
+          }
+
+          setMsg(errorText);
           btn.disabled = false;
           btn.innerText = "Create Account";
           return;
@@ -176,10 +197,9 @@
 
       } catch (err) {
         setMsg("Server error ❌");
+        btn.disabled = false;
+        btn.innerText = "Create Account";
       }
-
-      btn.disabled = false;
-      btn.innerText = "Create Account";
     }
 
     function goLogin() {

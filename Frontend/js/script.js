@@ -5,7 +5,9 @@ console.log("✅ script.js loaded");
 const form = document.getElementById("predictionForm");
 const analyzeBtn = document.getElementById("analyzeBtn");
 
-form.addEventListener("submit", predict);
+if (form) {
+    form.addEventListener("submit", predict);
+}
 
 async function predict(e) {
     e.preventDefault();
@@ -18,6 +20,12 @@ async function predict(e) {
         return;
     }
 
+    const loader = document.getElementById("loader");
+    const resultDiv = document.getElementById("result");
+    const predictionText = document.getElementById("predictionText");
+    const riskText = document.getElementById("riskText");
+    const suggestBtn = document.getElementById("suggestBtn");
+
     analyzeBtn.disabled = true;
     analyzeBtn.innerText = "Analyzing...";
 
@@ -25,19 +33,15 @@ async function predict(e) {
 
     if (!token) {
         alert("Session expired. Please login again.");
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerText = "🔍 Analyze Risk";
         window.location.href = "login.html";
         return;
     }
 
-    const loader = document.getElementById("loader");
-    const resultDiv = document.getElementById("result");
-    const predictionText = document.getElementById("predictionText");
-    const riskText = document.getElementById("riskText");
-    const suggestBtn = document.getElementById("suggestBtn");
-
     loader.classList.remove("hidden");
     resultDiv.classList.add("hidden");
-    suggestBtn.disabled = true;
+    if (suggestBtn) suggestBtn.disabled = true;
 
     const data = {
         name: document.getElementById("name").value.trim(),
@@ -65,7 +69,6 @@ async function predict(e) {
     }
 
     try {
-
         console.log("➡️ Sending request");
 
         const res = await fetch(`${BASE_URL}/predict`, {
@@ -82,7 +85,14 @@ async function predict(e) {
         const result = await res.json();
 
         if (!res.ok) {
-            throw new Error(result.detail || "Prediction failed");
+            // 🔥 Fix for [object Object] error messages
+            let errorMsg = "Prediction failed";
+            if (Array.isArray(result.detail)) {
+                errorMsg = result.detail[0].msg;
+            } else if (typeof result.detail === "string") {
+                errorMsg = result.detail;
+            }
+            throw new Error(errorMsg);
         }
 
         localStorage.setItem("patientData", JSON.stringify(data));
@@ -91,7 +101,7 @@ async function predict(e) {
         loader.classList.add("hidden");
         resultDiv.classList.remove("hidden");
 
-        suggestBtn.disabled = false;
+        if (suggestBtn) suggestBtn.disabled = false;
 
         const risk = result.risk || 0;
 
@@ -109,7 +119,6 @@ async function predict(e) {
         `;
 
     } catch (err) {
-
         loader.classList.add("hidden");
         resultDiv.classList.remove("hidden");
 
@@ -119,10 +128,8 @@ async function predict(e) {
         console.error(err);
 
     } finally {
-
         analyzeBtn.disabled = false;
         analyzeBtn.innerText = "🔍 Analyze Risk";
-
     }
 }
 

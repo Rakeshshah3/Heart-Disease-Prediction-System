@@ -75,9 +75,6 @@
       padding: 0 16px;
       border-radius: 10px;
       font-size: 14px;
-    }
-
-    input {
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(255, 255, 255, 0.05);
       color: white;
@@ -200,7 +197,14 @@
         const data = await res.json();
 
         if (!res.ok) {
-          throw new Error(data.detail || "Invalid credentials");
+          // 🔥 Extract clean error string from FastAPI validation array or object
+          let errorDetail = "Invalid credentials";
+          if (Array.isArray(data.detail)) {
+            errorDetail = data.detail[0].msg;
+          } else if (typeof data.detail === "string") {
+            errorDetail = data.detail;
+          }
+          throw new Error(errorDetail);
         }
 
         // ✅ SAVE TOKEN
@@ -208,14 +212,13 @@
 
         msg.innerText = "Login successful. Redirecting to dashboard...";
         msg.style.color = "#22c55e";
-        msg.style.color = "#22c55e";
 
         setTimeout(() => {
           window.location.href = "index.html"; // dashboard
         }, 800);
 
       } catch (err) {
-        msg.innerText = err.message;
+        msg.innerText = err.message || "An error occurred during login";
         msg.style.color = "red";
         btn.disabled = false;
         btn.innerText = "Login";
